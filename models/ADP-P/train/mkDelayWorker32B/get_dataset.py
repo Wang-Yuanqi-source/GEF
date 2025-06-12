@@ -15,29 +15,29 @@ class GNNDataset_criticalpath(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return os.listdir('/home/wllpro/llwang/yfdai/HRAE_paper/raw_crit_paths/blob_merge/') 
+        return os.listdir('/home/wllpro/llwang/yfdai/HRAE_paper/raw_crit_paths/mkDelayWorker32B/') 
 
     @property
     def processed_file_names(self):
         if self.type == 'wo_inter':
-            return ['blob_merge_wo_inter.pt']
+            return ['mkDelayWorker32B_wo_inter.pt']
         elif self.type == 'rrg':
-            return ['blob_merge_rrg.pt']
+            return ['mkDelayWorker32B_rrg.pt']
         elif self.type == 'clb':
-            return ['blob_merge_clb.pt']
+            return ['mkDelayWorker32B_clb.pt']
         else:
-            return ['blob_merge.pt']
+            return ['mkDelayWorker32B.pt']
         
     def download(self):
         pass
 
     def process(self):
-        report_df = pd.read_csv('/home/wllpro/llwang/yfdai/HRAE_paper/raw_dataset_results/blob_merge.csv')
+        report_df = pd.read_csv('/home/wllpro/llwang/yfdai/HRAE_paper/raw_dataset_results/mkDelayWorker32B.csv')
         data_list = []
 
         for json_file in tqdm(self.raw_file_names, desc='Processing JSON Files'):
             if json_file.endswith('.json'):
-                json_file_path = f'/home/wllpro/llwang/yfdai/HRAE_paper/raw_crit_paths/blob_merge/{json_file}'
+                json_file_path = f'/home/wllpro/llwang/yfdai/HRAE_paper/raw_crit_paths/mkDelayWorker32B/{json_file}'
                 arch_name = json_file.replace('.json', '')
                
                 if f'{arch_name}.xml' in os.listdir('/home/wllpro/llwang/yfdai/HRAE_paper/raw_dataset_archs/'):
