@@ -20,7 +20,7 @@ for lr in "${learning_rates[@]}"; do
 				for batch in "${batches[@]}";do
 					for num_layer in "${num_layers[@]}"; do
 						for conv_type in "${conv_types[@]}"; do
-							# 构建bsub提交命令
+							
 							nohup_cmd="nohup bsub -I python GAT_inst_new.py --lr $lr --decay $decay --neurons $neuron --batch $batch --num_layers $num_layer --conv_type $conv_type --dataset_dir $dataset_dir > \"${job_name}.out\" 2> \"${job_name}.err\" &"
                             echo "$nohup_cmd"
 							eval $nohup_cmd
