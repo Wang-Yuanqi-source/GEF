@@ -15,7 +15,7 @@ class GNNDataset_criticalpath(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return os.listdir('/home/wllpro/llwang/yfdai/HRAE_paper/raw_crit_paths/blob_merge/')  # 遍历 JSON 文件
+        return os.listdir('/home/wllpro/llwang/yfdai/HRAE_paper/raw_crit_paths/blob_merge/') 
 
     @property
     def processed_file_names(self):
@@ -39,16 +39,15 @@ class GNNDataset_criticalpath(InMemoryDataset):
             if json_file.endswith('.json'):
                 json_file_path = f'/home/wllpro/llwang/yfdai/HRAE_paper/raw_crit_paths/blob_merge/{json_file}'
                 arch_name = json_file.replace('.json', '')
-                # 查找对应的 XML 文件
+               
                 if f'{arch_name}.xml' in os.listdir('/home/wllpro/llwang/yfdai/HRAE_paper/raw_dataset_archs/'):
                     label_row = report_df[report_df['Architecture'] == arch_name]
                     if (not label_row.empty and not pd.isna(label_row['Critical Path'].iloc[0])):
-                        # 获取 average_improvement 作为标签
+                        
                         label = torch.tensor([label_row['Critical Path'].iloc[0] * label_row['Total Routing Area'].iloc[0]], dtype=torch.float) * 1e-7
-                        # 读取 JSON 文件并获取节点标签
+                       
                         node_labels = count_node_names(json_file_path)
 
-                        # 将标签传入process_xml_to_data
                         xml_file_path = f'/home/wllpro/llwang/yfdai/HRAE_paper/raw_dataset_archs/{arch_name}.xml'
                         data = process_xml_to_data(xml_file_path, label, node_labels)  # 传入节点标签
                         data_list.append(data)
@@ -58,7 +57,6 @@ class GNNDataset_criticalpath(InMemoryDataset):
         torch.save((data, slices), self.processed_paths[0])
 
 if __name__ == '__main__':
-    # 创建和保存数据集
     dataset = GNNDataset_criticalpath(root='/home/wllpro/llwang/yfdai/HRAE_paper/final_dataset')
 
 # Print information about the first 20 graphs in the dataset
