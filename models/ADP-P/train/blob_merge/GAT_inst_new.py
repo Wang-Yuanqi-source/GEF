@@ -238,6 +238,7 @@ if __name__ == "__main__":
     parser.add_argument("--neurons", type=int, default=8, help="Number of neurons in the convolution layer.")
     parser.add_argument("--num_layers", type=int, default=3, help="Number of graph convolutional layers.")
     parser.add_argument("--conv_type", type=str, default="GCN", choices=["GCN", "GAT", "SAGE"], help="Type of graph convolution layer.")
+    parser.add_argument("--dataset_dir", type=str, default='/home/wllpro/llwang/yfdai/HRAE_paper/final_dataset', help="The save director of the dataset.")
     args = parser.parse_args()
 
     learning_rate = args.lr
@@ -246,6 +247,7 @@ if __name__ == "__main__":
     num_layers = args.num_layers
     conv_type = args.conv_type
     batch_size = args.batch
+    dataset_dir = args.dataset_dir
 
     log_filename = f"best_{args.lr}_{args.neurons}_{args.conv_type}_{args.num_layers}.log"
     logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
@@ -259,7 +261,7 @@ if __name__ == "__main__":
 
 
     # Load dataset
-    dataset = GNNDataset_criticalpath(root='/home/wllpro/llwang/yfdai/HRAE_paper/final_dataset', type='ADP')
+    dataset = GNNDataset_criticalpath(root=dataset_dir, type='ADP')
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Split dataset
