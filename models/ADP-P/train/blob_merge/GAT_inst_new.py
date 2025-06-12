@@ -19,17 +19,13 @@ class SAGE_JK(torch.nn.Module):
     def __init__(self, num_node_features, conv_neurons, conv_type='GAT', num_layers=3):
         super(SAGE_JK, self).__init__()
 
-        # 设置跳跃知识的模式
         jk_mode = 'cat'
-        
-        # 定义卷积层类型的字典
         conv_dict = {
             'GCN': GCNConv,
             'GAT': GATConv,
             'SAGE': SAGEConv
         }
 
-        # 初始化卷积层和批归一化层
         self.convs = ModuleList()
         self.bns = ModuleList()
 
@@ -38,20 +34,16 @@ class SAGE_JK(torch.nn.Module):
             self.convs.append(conv_dict[conv_type](in_channels, conv_neurons))
             self.bns.append(BatchNorm1d(conv_neurons))
         
-        # 初始化跳跃知识层
         self.jk = JumpingKnowledge(mode=jk_mode, channels=conv_neurons, num_layers=num_layers)
         
-        # 计算拼接后的特征大小
         concatenated_feature_size = conv_neurons * num_layers if jk_mode == 'cat' else conv_neurons
         
-        # 初始化分类用的全连接层
         self.lin1 = torch.nn.Linear(concatenated_feature_size, conv_neurons * 2)
         self.lin2 = torch.nn.Linear(conv_neurons * 2, conv_neurons // 2)
         self.lin3 = torch.nn.Linear(conv_neurons // 2, 1)
 
-        # 初始化回归用的全连接层
-        self.reg_lin1 = torch.nn.Linear(272 + concatenated_feature_size + 1, 32)  # 加上170和池化后的特征
-        self.reg_lin2 = torch.nn.Linear(32, 1)  # 回归输出为1维
+        self.reg_lin1 = torch.nn.Linear(272 + concatenated_feature_size + 1, 32)  
+        self.reg_lin2 = torch.nn.Linear(32, 1)  
 
 
     def forward(self, data):  
@@ -70,41 +62,37 @@ class SAGE_JK(torch.nn.Module):
         
         x = self.jk(layer_features)
 
-        # Classification output: 对每个节点进行预测
+        # Classification output
         node_output = F.relu(self.lin1(x))
         node_output = F.relu(self.lin2(node_output))
         node_output = self.lin3(node_output)
 
         node_delay = node_output * delay_param.view(-1, 1)
 
-        # 对每个图的节点进行全局池化
-        x_class = global_mean_pool(node_delay, batch)  # 池化的是node_output
-        x_pool = global_mean_pool(x, batch)  # 池化x以获取图的特征
+        x_class = global_mean_pool(node_delay, batch)  
+        x_pool = global_mean_pool(x, batch) 
 
         # Regression output
         print(data.other_attrs.shape)
-        other_attrs = data.other_attrs.view(-1, 273)  # 确保other_attrs是合适的形状
+        other_attrs = data.other_attrs.view(-1, 273) 
 
         # print("Shape of other_attrs:", other_attrs.shape)
-        # 选取前170个属性
+        
         reg_input = other_attrs[:, :272]  # Shape: [batch_size, 170]
 
-        # print("Shape of reg_input:", reg_input.shape)  # 应该是 [batch_size, 170]
-        # print("Shape of x_class:", x_class.shape)  # 确保 x_class 的形状与 reg_input 相匹配
-        # print("Shape of x_pool:", x_pool.shape)  # 确保池化后的x的形状
+        # print("Shape of reg_input:", reg_input.shape)  
+        # print("Shape of x_class:", x_class.shape)  
+        # print("Shape of x_pool:", x_pool.shape)  
 
-        # 使用last_attr（最后一个属性）作为真实值标签
         last_attr = other_attrs[:, -1].unsqueeze(1)  # Shape: [batch_size, 1]
 
-        # 合并reg_input、x_class（池化后的node_output）和x_pool（池化后的x）
-        reg_input = torch.cat((reg_input, x_class, x_pool), dim=1)  # Shape: [batch_size, 170 + 特征维度]
+        reg_input = torch.cat((reg_input, x_class, x_pool), dim=1) 
         print()
 
-        # 回归输出
         reg_output = F.relu(self.reg_lin1(reg_input))
         reg_output = self.reg_lin2(reg_output)
 
-        return node_output, reg_output, last_attr  # 返回last_attr以便于计算误差
+        return node_output, reg_output, last_attr  
 
 def train(train_loader):
     model.train()
@@ -121,9 +109,9 @@ def train(train_loader):
 
         node_output, reg_output, last_attr = model(data)
 
-        node_loss = F.mse_loss(node_output.view_as(data.y).float(), data.y.float())  # 确保维度匹配
-        # 计算回归损失
-        reg_loss = F.mse_loss(reg_output.squeeze(), last_attr.squeeze())  # 确保维度匹配
+        node_loss = F.mse_loss(node_output.view_as(data.y).float(), data.y.float()) 
+      
+        reg_loss = F.mse_loss(reg_output.squeeze(), last_attr.squeeze())  
         loss = node_loss + 100 * reg_loss  # Total loss
 
         loss.backward()
@@ -137,7 +125,7 @@ def train(train_loader):
         all_reg_labels.extend(last_attr.detach().cpu().numpy())
 
     average_loss = total_loss / len(train_loader.dataset)
-    average_node_loss = total_node_loss / len(train_loader.dataset)  # 平均节点损失
+    average_node_loss = total_node_loss / len(train_loader.dataset)  
     average_reg_loss = total_reg_loss / len(train_loader.dataset)
     all_reg_preds = np.array(all_reg_preds)
     all_reg_labels = np.array(all_reg_labels)
@@ -164,9 +152,9 @@ def test(data_loader):
 
             node_output, reg_output, last_attr = model(data)
 
-            node_loss = F.mse_loss(node_output.view_as(data.y).float(), data.y.float())  # 确保维度匹配
-            # 计算回归损失
-            reg_loss = F.mse_loss(reg_output.squeeze(), last_attr.squeeze())  # 确保维度匹配
+            node_loss = F.mse_loss(node_output.view_as(data.y).float(), data.y.float())  
+           
+            reg_loss = F.mse_loss(reg_output.squeeze(), last_attr.squeeze()) 
             loss = node_loss + 100 * reg_loss  # Total loss
 
             total_loss += loss.item() * data.num_graphs
@@ -177,7 +165,7 @@ def test(data_loader):
             all_reg_labels.extend(last_attr.detach().cpu().numpy())
 
     average_loss = total_loss / len(train_loader.dataset)
-    average_node_loss = total_node_loss / len(train_loader.dataset)  # 平均节点损失
+    average_node_loss = total_node_loss / len(train_loader.dataset)  
     average_reg_loss = total_reg_loss / len(train_loader.dataset)
     all_reg_preds = np.array(all_reg_preds)
     all_reg_labels = np.array(all_reg_labels)
@@ -204,12 +192,12 @@ def evaluate(model, test_loader, device, plot_path='true_vs_predicted.png'):
 
     return all_reg_preds, all_reg_labels
 
-    # # 计算指标
+    
     # mape = np.mean(np.abs((all_reg_labels - all_reg_preds) / all_reg_labels)) * 100
     # r = np.corrcoef(all_reg_labels, all_reg_preds)[0, 1]
     # r2 = r2_score(all_reg_labels, all_reg_preds)
 
-    # # 绘制散点图
+    
     # plt.figure(figsize=(8, 6))
     # plt.scatter(all_reg_labels, all_reg_preds, alpha=0.5)
     # plt.plot([all_reg_labels.min(), all_reg_labels.max()],
@@ -279,7 +267,7 @@ if __name__ == "__main__":
     best_epoch = 0
 
     for epoch in range(300):
-        # 从训练和测试中获取结果，包括相关系数 R 和 RRSE
+        
         train_loss, train_node_loss, train_reg_loss, train_mape, train_r, train_rr = train(train_loader)
         test_loss, test_node_loss, test_reg_loss, test_mape, test_r, test_rr = test(test_loader)
 
@@ -289,11 +277,9 @@ if __name__ == "__main__":
                     f'Test Reg Loss: {test_reg_loss:.4f}, Test MAPE: {test_mape:.4f}, Test R: {test_r:.4f}, '
                     f'Test R2: {test_rr:.4f}')
 
-        # 如果当前的 MAPE 是最好的，则保存模型检查点
         if test_rr > best_metric:
             best_metric = test_rr
             best_epoch = epoch + 1
             save_checkpoint(epoch + 1, model, optimizer, f'wo_inter_{args.lr}_{args.conv_type}_{args.num_layers}_{test_rr:.4f}_epoch_{epoch + 1}.pth')
 
-    # 记录最佳性能的 epoch 和度量值
     logging.info(f'Best performance at epoch {best_epoch} with Test MAPE: {best_metric:.4f}')
