@@ -1,7 +1,7 @@
 # GEF
 
 ## Introduction
- The full name of GEF is "GNN-based Evaluation Framework for FPGA Routing Architecture". It is a GNN-based Evaluation Framework to predict the routability and the area-delay product (ADP) of various FPGA routing architectures. The Rou-P integrates Self-Attention Pooling (SAGPool), while the ADP-P benefits from intermediate supervision through auxiliary node-level labels.
+ The full name of GEF is "GNN-based Evaluation Framework for FPGA Routing Architecture". It is a GNN-based Evaluation Framework to predict the routability and the area-delay product (ADP) of various FPGA routing architectures. The Rou-P integrates Self-Attention Pooling (SAGPool), while the ADP-P benefits from intermediate supervision through auxiliary node-level labels.
 
 ## Getting Started
 
@@ -27,5 +27,6 @@ cd models/Rou-P/train
 chmod +x run_new_SAG.sh
 ./run_new_SAG.sh
 ```
+Remember to change the ``dataset_dir`` in ``run_new_SAG.sh`` to you dataset location before you run the command above.
 
 
