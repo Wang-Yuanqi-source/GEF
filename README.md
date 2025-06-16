@@ -12,4 +12,8 @@ git clone https://github.com/Wang-Yuanqi-source/GEF.git
 ```
 
 ### Requirements
-The requirements of this repo are listed in the file ``requirements.txt``.
+The requirements of this repo are listed in the file ``requirements.txt``. If you have any trouble in building the environment, we provide a conda environment called "dgl".
+
+```bash
+source dgl/bin/activate
+```
