@@ -19,6 +19,6 @@ source dgl/bin/activate
 ```
 
 ### Usage
-Due to the large size of our dataset, it is hosted on Google Drive. Before using the project, please download the dataset using the link provided in ``dataset/dataset.txt``, and extract the contents into the ``dataset``/ directory.
+Due to the large size of our dataset, it is hosted on Google Drive. Before using the project, please download the dataset using the link provided in ``dataset/dataset.txt``, and extract the contents into the ``dataset/`` directory.
 
 
