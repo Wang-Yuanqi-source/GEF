@@ -32,14 +32,21 @@ Remember to change the ``dataset_dir`` in ``run_new_SAG.sh`` to you dataset loca
 
 We also provide a pre-trained optimal model, which achieves a prediction accuracy of 94.56% for routability. It is located at ``models/Rou-P/best_model/best_routability_model.pth``
 
-#### Rou-P
+#### ADP-P
 The ADP-P model (for ADP prediction) is lacated at ``models/ADP-P/`` director. You need to train the model first by:
 ```bash
 cd models/ADP-P/train/{benchmark}
-chmod +x run_new_SAG.sh
-./run_new_SAG.sh
+chmod +x run_new_gnn.sh
+./run_new_gnn.sh
 ```
-Remember to change the ``dataset_dir`` in ``run_new_SAG.sh`` to you dataset location before you run the command above.
+Remember to change the ``dataset_dir`` in ``run_new_gnn.sh`` to you dataset location before you run the command above.
+
+If you wish to perform training on all benchmarks in a single run, you can use ``models/ADP-P/train/run_all_models.sh``.
+```bash
+cd models/ADP-P/train/
+chmod +x run_all_models.sh
+./run_all_models.sh
+```
 
 We also provide a pre-trained optimal model, which achieves a prediction accuracy of 94.56% for routability. It is located at ``models/Rou-P/best_model/best_routability_model.pth``
 
