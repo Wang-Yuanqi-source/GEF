@@ -48,6 +48,6 @@ chmod +x run_all_models.sh
 ./run_all_models.sh
 ```
 
-We also provide a pre-trained optimal model, which achieves a prediction accuracy of 94.56% for routability. It is located at ``models/Rou-P/best_model/best_routability_model.pth``
+We also provide pre-trained optimal models for each circuit in the VTR benchmark, which achieves a prediction accuracy of 94.57% for ADP-P on average. They are located at ``models/ADP-P/best_models/``
 
 
