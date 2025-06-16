@@ -12,4 +12,4 @@ git clone https://github.com/Wang-Yuanqi-source/GEF.git
 ```
 
 ### Requirements
-
+The requirements of this repo are listed in the file ``requirements.txt``.
