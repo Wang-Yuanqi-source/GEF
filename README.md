@@ -50,5 +50,5 @@ chmod +x run_all_models.sh
 
 We also provide pre-trained optimal models for each circuit in the VTR benchmark, which achieves a prediction accuracy of 94.57% for ADP-P on average. They are located at ``models/ADP-P/best_models/``.
 
-## Reference
+## How to Cite
 Yuanqi Wang, Yunfei Dai, Jiangnan Li, Kaixiang Zhu, Huizhen Kuang, Hao Zhou, Eric Ren, Xifan Tang, Weijun Qin, Tao Li, and Lingli Wang. "GEF: A GNN-based Evaluation Framework for FPGA Routing Architecture." In 35st International Conference on Field-Programmable Logic and Applications (FPL), 2025.
