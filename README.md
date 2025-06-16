@@ -21,6 +21,7 @@ source dgl/bin/activate
 ### Usage
 Due to the large size of our dataset, it is hosted on Google Drive. Before using the project, please download the dataset using the link provided in ``dataset/dataset.txt``, and extract the contents into the ``dataset/`` directory.
 
+#### Rou-P
 The Rou-P model (for routability prediction) is lacated at ``models/Rou-P/`` director. You need to train the model first by:
 ```bash
 cd models/Rou-P/train
@@ -28,5 +29,7 @@ chmod +x run_new_SAG.sh
 ./run_new_SAG.sh
 ```
 Remember to change the ``dataset_dir`` in ``run_new_SAG.sh`` to you dataset location before you run the command above.
+
+We also provide a pre-trained optimal model, which achieves a prediction accuracy of 94.56% for routability. It is located at ``models/Rou-P/best_model/best_routability_model.pth``
 
 
