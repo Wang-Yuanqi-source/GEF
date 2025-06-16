@@ -30,7 +30,7 @@ chmod +x run_new_SAG.sh
 ```
 Remember to change the ``dataset_dir`` in ``run_new_SAG.sh`` to you dataset location before you run the command above.
 
-We also provide a pre-trained optimal model, which achieves a prediction accuracy of 94.56% for routability. It is located at ``models/Rou-P/best_model/best_routability_model.pth``
+We also provide a pre-trained optimal model, which achieves a prediction accuracy of 94.56% for routability. It is located at ``models/Rou-P/best_model/best_routability_model.pth``.
 
 #### ADP-P
 The ADP-P model (for ADP prediction) is lacated at ``models/ADP-P/`` director. You need to train the model first by:
@@ -48,6 +48,7 @@ chmod +x run_all_models.sh
 ./run_all_models.sh
 ```
 
-We also provide pre-trained optimal models for each circuit in the VTR benchmark, which achieves a prediction accuracy of 94.57% for ADP-P on average. They are located at ``models/ADP-P/best_models/``
+We also provide pre-trained optimal models for each circuit in the VTR benchmark, which achieves a prediction accuracy of 94.57% for ADP-P on average. They are located at ``models/ADP-P/best_models/``.
 
-
+## Reference
+Yuanqi Wang, Yunfei Dai, Jiangnan Li, Kaixiang Zhu, Huizhen Kuang, Hao Zhou, Eric Ren, Xifan Tang, Weijun Qin, Tao Li, and Lingli Wang. "GEF: A GNN-based Evaluation Framework for FPGA Routing Architecture." In 35st International Conference on Field-Programmable Logic and Applications (FPL), 2025.
